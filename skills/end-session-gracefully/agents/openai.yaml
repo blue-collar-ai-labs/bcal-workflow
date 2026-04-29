@@ -1,0 +1,4 @@
+interface:
+  display_name: "End Session Gracefully"
+  short_description: "Wrap up a session cleanly with status update, diary, commit, and next-session prompt"
+  default_prompt: "Use $end-session-gracefully to wrap up this session."

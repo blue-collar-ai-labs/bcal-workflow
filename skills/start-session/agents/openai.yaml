@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Session"
+  short_description: "Resume from last session or start fresh"
+  default_prompt: "Use $start-session to begin."

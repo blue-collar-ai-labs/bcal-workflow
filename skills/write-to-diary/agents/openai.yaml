@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write To Diary"
+  short_description: "Record session work to DIARY.csv"
+  default_prompt: "Use $write-to-diary to record what was accomplished in this session."

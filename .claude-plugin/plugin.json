@@ -1,0 +1,17 @@
+{
+  "name": "bcal-workflow",
+  "version": "0.1.0",
+  "description": "Agent-agnostic workflow skills for session lifecycle management.",
+  "author": {
+    "name": "Blue Collar AI Labs",
+    "email": "dksmith01@gmail.com"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "workflow",
+    "session-management",
+    "agent-agnostic",
+    "diary",
+    "notifications"
+  ]
+}
