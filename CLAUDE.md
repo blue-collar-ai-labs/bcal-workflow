@@ -21,3 +21,4 @@ Skill directories use kebab-case. The `name:` in SKILL.md frontmatter matches th
 - **Agent-agnostic.** Skills use platform-specific question tools (`AskUserQuestion` for Claude Code, `request_user_input` for Codex, `ask_user` for Gemini) rather than hardcoding one agent's API.
 - **No dependency on braintrust.** These skills are brain-agnostic — they work in any repo regardless of brain configuration.
 - **No dependency on proposal-pro.** `notify-proof` sends Slack notifications for any Proof review, not just proposals.
+- **MCP dependencies are optional.** `live-transcript` requires a Notion MCP server but degrades gracefully when unavailable. Skills that depend on external MCP servers must include a pre-flight check and clear setup instructions.
