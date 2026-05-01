@@ -1,0 +1,4 @@
+interface:
+  display_name: "Live Transcript"
+  short_description: "Capture group discussion from a live Notion transcript"
+  default_prompt: "Use $live-transcript to capture the team's discussion."
