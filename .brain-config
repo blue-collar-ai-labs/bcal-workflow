@@ -1,0 +1,5 @@
+type: coding
+sensitivity: low
+domain: [workflow, agent-plugins, session-lifecycle, live-transcript]
+brains:
+  - bcal-brain
