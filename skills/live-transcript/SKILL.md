@@ -7,6 +7,14 @@ description: "Capture group discussion from a live Notion transcript and synthes
 
 Read a team's live discussion from a Notion transcript, synthesize it, and return a clear answer the operator can relay to whatever workflow prompted the question.
 
+## How it works
+
+Notion's live transcription writes spoken content into a `<transcript>` block inside a `<meeting-notes>` element on the page. This content cannot be bracketed by external markers on the page — it lives in a separate block structure.
+
+To avoid pulling a full multi-hour transcript into the main context window, this skill delegates all transcript reads to **subagents**. The main conversation only ever sees the anchor line and the extracted discussion delta — never the raw transcript.
+
+**Anchor-based extraction:** A subagent snapshots the last line of the transcript when capture begins. When capture ends, a second subagent reads the transcript, finds the anchor, and returns only the new lines spoken during the discussion window.
+
 ## Steps
 
 ### 1. Check for Notion MCP availability
@@ -45,7 +53,35 @@ Filter results to pages only (not databases). Sort by last edited time, descendi
 
 Cache the selected transcript page ID in conversation context for subsequent invocations.
 
-### 3. Confirm connection
+### 3. Confirm connection and record anchor
+
+Spawn a subagent to perform the initial transcript read. The subagent must:
+
+1. Fetch the transcript page with `include_transcript: true` (required — without this flag, Notion omits transcript content).
+2. Verify the page contains a `<meeting-notes>` block with a `<transcript>` section.
+3. Return **only** the following to the main context:
+   - The page title (for the connection confirmation)
+   - Whether a `<transcript>` section exists and has content
+   - The **last line** of the `<transcript>` block (this is the anchor)
+
+The subagent prompt should be:
+
+```
+Fetch Notion page [PAGE_ID] with include_transcript: true. Look inside the
+<meeting-notes> block for a <transcript> section. Report back ONLY:
+1. The page title
+2. Whether the transcript section exists and has content (yes/no)
+3. The exact text of the LAST line in the <transcript> block (this will be
+   used as an anchor — copy it exactly)
+
+Do NOT return the full transcript. Only return these three items.
+```
+
+If the transcript section is empty or missing, inform the operator:
+
+```
+Connected to [page name], but no transcript content found yet. Is the recording active?
+```
 
 Print the connection confirmation:
 
@@ -55,7 +91,11 @@ Live Transcript Mode active — connected to [page name].
 
 If this is a subsequent invocation (transcript was already cached), still print this confirmation so the team on the call sees that the connection is live.
 
+Store the anchor line in conversation context. If the transcript was empty, record an empty anchor — all content that appears will be new.
+
 ### 4. Capture the question context
+
+Increment the session's question counter (Q1, Q2, Q3...).
 
 Read the current question from the conversation context — this is whatever question or prompt the operator is trying to answer. If the question is not obvious from context, ask the operator:
 
@@ -63,74 +103,70 @@ Read the current question from the conversation context — this is whatever que
 What question should the team discuss? Paste the question or describe it briefly.
 ```
 
-### 5. Write the START marker
-
-Increment the session's question counter (Q1, Q2, Q3...).
-
-Append a collapsed toggle block to the end of the transcript page using the Notion MCP. The toggle's title text should be:
-
-```
-LT:{Q_ID}:START
-```
-
-For example: `LT:Q1:START`
-
-Record the block ID returned by the write operation — this is needed in Step 8 to identify the content boundary.
-
-**If the write fails:** This is the capability test. Report:
-
-```
-Live Transcript Mode requires the ability to write blocks to Notion pages.
-The current Notion MCP server does not appear to support this operation.
-```
-
-Then stop — do not proceed.
-
-### 6. Wait for discussion
+### 5. Wait for discussion
 
 Print the capture indicator:
 
 ```
-Listening... (type anything when the discussion is done)
+Listening for Q{n}... (type anything when the discussion is done)
 ```
 
 Wait for the operator to type any input. Any text — including just pressing enter — signals that the discussion is complete.
 
 Do not implement a silence timeout. Always wait for explicit operator input.
 
-### 7. Write the STOP marker
+### 6. Extract the discussion
 
-Append a collapsed toggle block to the end of the transcript page. The toggle's title text should be:
+Spawn a subagent to read the transcript and extract only the new content. The subagent must:
 
-```
-LT:{Q_ID}:STOP
-```
+1. First, try `notion-search` with the `page_url` parameter set to the transcript page ID, using a distinctive phrase from the anchor line as the query. If this returns results that help locate the boundary without a full fetch, use them.
+2. If search doesn't return usable transcript content, fetch the full page with `include_transcript: true`.
+3. Find the anchor line in the transcript using **fuzzy matching**. Notion's live transcription continuously revises wording as it refines recognition, so the anchor text recorded at START may differ slightly from what appears at STOP. Match on the first ~10 words of the anchor rather than requiring an exact string match.
+4. Extract everything **after** the anchor line.
+5. Return **only** the extracted discussion text to the main context.
 
-For example: `LT:Q1:STOP`
-
-Record the block ID returned by the write operation.
-
-**If the write fails:** Retry once. If still failing, proceed to Step 8 using a degraded capture — read from the START marker to the end of the page. Inform the operator:
+The subagent prompt should be:
 
 ```
-STOP marker write failed. Reading from the start of your discussion to the end of the transcript instead.
+I need you to extract new discussion content from a Notion transcript.
+
+Page ID: [PAGE_ID]
+Anchor line (marks where the discussion STARTED — extract everything AFTER this):
+"[ANCHOR_TEXT]"
+
+Strategy:
+1. Try notion-search with page_url set to the page ID, querying for a
+   distinctive phrase from the anchor line. If this helps locate the boundary
+   without a full fetch, use it.
+2. Otherwise, fetch the page with include_transcript: true.
+3. Find the anchor line in the <transcript> block. Use FUZZY MATCHING — compare
+   the first ~10 words of the anchor rather than requiring an exact string
+   match. Notion's live transcription revises wording between reads, so the
+   anchor text may have shifted slightly.
+4. Return ONLY the text that appears AFTER the anchor line. Do NOT return any
+   text before or including the anchor.
+5. If the anchor is not found, return the last third of the transcript and
+   note that the anchor was not found.
+6. If no new content appears after the anchor, say so.
+
+Do NOT return the full transcript. Only return the new discussion content.
 ```
 
-### 8. Read the transcript content
+**If the subagent reports the anchor was not found:** Inform the operator:
 
-Fetch the blocks from the transcript page using the Notion MCP. Use the block IDs from Steps 5 and 7 as boundaries:
+```
+Could not find the exact starting point. Extracting recent discussion — please verify the content covers your discussion.
+```
 
-- Start reading from the block after the START marker block ID
-- Stop reading at the block before the STOP marker block ID
-- If using degraded capture (STOP marker failed), read from the START marker to the end of the page
+**If the subagent reports no new content:** Inform the operator:
 
-The Notion API paginates blocks with a cursor. Paginate forward through the results. For very long transcripts, cap extraction at 3 cursor pages of results. If the START marker is not found within that range, ask the operator to confirm the correct transcript page.
+```
+No new transcript content detected since capture started. The team may need to speak, or the recording may have paused.
+```
 
-Extract the text content from each block between the markers. Combine into a single text representing the team's discussion.
+### 7. Synthesize the answer
 
-### 9. Synthesize the answer
-
-Read the discussion text in the context of the question from Step 4. Synthesize it into an answer appropriate to the question type:
+Read the discussion text returned by the subagent in the context of the question from Step 4. Synthesize it into an answer appropriate to the question type:
 
 - **Menu selection:** Identify which option the team chose and state it clearly.
 - **Text response:** Compose a concise answer capturing the team's consensus.
@@ -141,14 +177,14 @@ Read the discussion text in the context of the question from Step 4. Synthesize 
 1. Summarize the perspectives or tensions identified.
 2. Present them as selectable options using the platform's question tool, including a "Re-discuss" option.
 3. If the operator picks a perspective, use that as the answer.
-4. If the operator picks "Re-discuss," return to Step 5 with a new question counter (e.g., Q2 if the original was Q1) to write fresh markers and capture a new discussion.
+4. If the operator picks "Re-discuss," return to Step 3 (re-record anchor from current transcript position) with a new question counter (e.g., Q2 if the original was Q1) to capture a new discussion.
 
-### 10. Present the synthesized answer
+### 8. Present the synthesized answer
 
 Display the answer clearly so the operator can relay it to whatever prompted the question:
 
 ```
-**Synthesized answer:**
+**Synthesized answer (Q{n}):**
 
 [The answer, formatted appropriately for the question type]
 ```
