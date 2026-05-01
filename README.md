@@ -19,6 +19,7 @@ After installing, type `/` and look for:
 - `bcal-workflow:end-session-gracefully`
 - `bcal-workflow:write-to-diary`
 - `bcal-workflow:notify-proof`
+- `bcal-workflow:live-transcript`
 
 ## Install (Codex)
 
@@ -36,6 +37,15 @@ git clone https://github.com/blue-collar-ai-labs/bcal-workflow.git
 | end-session-gracefully | `/bcal-workflow:end-session-gracefully` | Commit, push, update project status, write a handoff prompt |
 | write-to-diary | `/bcal-workflow:write-to-diary` | Append a session summary to `DIARY.csv` |
 | notify-proof | `/bcal-workflow:notify-proof` | Send a Slack notification when a doc is posted to Proof for review |
+| live-transcript | `/bcal-workflow:live-transcript` | Capture group discussion from a live Notion transcript and synthesize an answer |
+
+### live-transcript setup
+
+Requires a Notion MCP server configured in your session. The skill uses the MCP server to search for transcript pages, write markers, and read discussion content.
+
+1. Install a Notion MCP server (e.g., [makenotion/notion-mcp-server](https://github.com/makenotion/notion-mcp-server))
+2. Configure it with a Notion API integration token that has access to your transcript pages
+3. Add the MCP server to your Claude Code or agent configuration
 
 ### notify-proof setup
 
