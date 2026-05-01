@@ -1,7 +1,7 @@
 ---
 title: "feat: Add Live Transcript Mode skill"
 type: feat
-status: active
+status: complete
 date: 2026-05-01
 origin: docs/brainstorms/live-transcript-mode-requirements.md
 ---
@@ -257,6 +257,19 @@ skills/
 | Long transcripts may require many API calls to paginate | Forward pagination only (Notion API has no reverse mode). Cap at last 3 cursor pages. If START marker not found within that range, ask operator to confirm. |
 | STOP marker write fails mid-flow | Retry once; if still failing, degrade to reading from START to end-of-page. Operator is informed of degraded capture. |
 | Transcript naming pattern varies by meeting bot | Skill tries multiple date formats and falls back to asking the operator if search returns nothing. |
+
+### Post-Implementation Pivot (2026-05-01)
+
+Testing against real Notion transcripts revealed that the toggle-marker approach (R4, R5, R6) does not work as designed. Transcript content lives inside `<meeting-notes><transcript>` blocks, not as sibling blocks on the page. Markers appended to the page cannot bracket transcript content.
+
+**Revised approach:** Anchor-based extraction with subagent isolation. A subagent reads the transcript at capture start and returns only the last line as an anchor. At capture end, a second subagent reads the transcript, finds the anchor via fuzzy matching, and returns only the delta. The main context window never sees the full transcript.
+
+Key discoveries:
+- `include_transcript: true` is required on `notion-fetch` — without it, Notion omits transcript content
+- Notion revises transcription between reads, requiring fuzzy anchor matching (~10 words)
+- A 1.5-hour transcript returns ~64KB; subagent isolation is essential for context window protection
+
+See `docs/solutions/architecture-patterns/notion-live-transcript-subagent-extraction-2026-05-01.md` for the full lesson.
 
 ---
 
