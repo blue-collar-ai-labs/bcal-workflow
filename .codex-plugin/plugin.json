@@ -1,0 +1,40 @@
+{
+  "name": "bcal-workflow",
+  "version": "0.1.0",
+  "description": "Agent-agnostic workflow skills for session lifecycle management.",
+  "author": {
+    "name": "Blue Collar AI Labs",
+    "email": "dksmith01@gmail.com",
+    "url": "https://github.com/blue-collar-ai-labs"
+  },
+  "homepage": "https://github.com/blue-collar-ai-labs/bcal-workflow",
+  "repository": "https://github.com/blue-collar-ai-labs/bcal-workflow",
+  "license": "UNLICENSED",
+  "keywords": [
+    "workflow",
+    "session-management",
+    "agent-agnostic",
+    "diary",
+    "notifications"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "BCAL Workflow",
+    "shortDescription": "Session lifecycle skills",
+    "longDescription": "BCAL Workflow provides reusable skills for starting sessions, ending sessions gracefully, writing diary entries, sending Proof notifications, and working with live transcripts.",
+    "developerName": "Blue Collar AI Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/blue-collar-ai-labs/bcal-workflow",
+    "defaultPrompt": [
+      "Start this coding session",
+      "End the session gracefully"
+    ],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}

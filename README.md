@@ -23,11 +23,13 @@ After installing, type `/` and look for:
 
 ## Install (Codex)
 
-Codex does not have a plugin marketplace. Copy skill directories into your project and reference the `agents/openai.yaml` configs in your `AGENTS.md`.
+Add the marketplace, then enable `bcal-workflow` in Codex's plugin UI:
 
 ```bash
-git clone https://github.com/blue-collar-ai-labs/bcal-workflow.git
+codex plugin marketplace add blue-collar-ai-labs/bcal-agent-plugins
 ```
+
+The plugin publishes Codex metadata in `.codex-plugin/plugin.json` and exposes the skills under `skills/`.
 
 ## Skills
 
