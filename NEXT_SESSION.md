@@ -1,9 +1,9 @@
-## Resume: bcal-workflow — Live Transcript Mode end-to-end validation
+## Resume: bcal-workflow — Live Transcript Mode first real use
 
-**Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace)
+**Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Rewrote `live-transcript` skill from toggle-marker approach to subagent anchor-based extraction after testing against real Notion transcripts. The skill now protects the main context window — subagents read the full transcript and return only the anchor line and discussion delta. Connected repo to bcal-brain and promoted the architecture pattern as a lesson.
+**Just completed:** Tested live-transcript skill end-to-end against real Notion transcripts. Discovered toggle markers can't bracket transcript content (lives inside `<meeting-notes><transcript>`). Rewrote skill to use subagent anchor-based extraction — protects main context window from 60-130KB transcript reads. Fuzzy matching handles Notion's transcription revisions. Connected repo to bcal-brain, promoted architecture lesson, marked plan complete.
 
-**Next task:** Run a full end-to-end test of the skill as written — invoke `/bcal-workflow:live-transcript` during a live call, let it discover the transcript, capture a real question discussion, and synthesize the answer. Validate that subagent isolation actually keeps the main context lean. Also consider updating `docs/plans/2026-05-01-001-feat-live-transcript-mode-plan.md` status to reflect the architectural pivot.
+**Next task:** First real use — invoke `/bcal-workflow:live-transcript` during an actual team call with a real question to discuss and synthesize. This validates the full workflow including synthesis quality and operator UX, not just plumbing.
 
 **Read first:** `skills/live-transcript/SKILL.md`, `docs/solutions/architecture-patterns/notion-live-transcript-subagent-extraction-2026-05-01.md`
