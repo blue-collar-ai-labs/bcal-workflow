@@ -1,9 +1,9 @@
-## Resume: bcal-workflow — Live Transcript first real use
+## Resume: bcal-workflow — plugin v0.3.0 shipped
 
 **Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Fixed plugin update detection — updater compares version strings, not git SHAs. Bumped to 0.2.0, confirmed the update flow works. Added a pre-commit hook in `.claude/settings.json` that blocks skill changes without a version bump. Documented and promoted to bcal-brain.
+**Just completed:** Fixed /doctor warning — moved version-bump guard from invalid Claude Code hook to native git pre-commit hook. Enhanced end-session-gracefully to fetch Proof API state and surface pending reviews in NEXT_SESSION.md. Plugin bumped to 0.3.0.
 
-**Next task:** First real use of `/bcal-workflow:live-transcript` during an actual team call. This validates synthesis quality and operator UX end-to-end. Also consider whether the version bump hook should auto-increment the patch version instead of just blocking.
+**Next task:** The cached plugin version is still 0.2.0 (visible in the skill base directory path). Verify the plugin update mechanism picks up 0.3.0 on next install/refresh. Also: first real use of `/bcal-workflow:live-transcript` during a team call remains pending.
 
-**Read first:** `skills/live-transcript/SKILL.md`, `docs/solutions/plugin-version-bump-update-detection-2026-05-04.md`
+**Read first:** `skills/end-session-gracefully/SKILL.md`, `CLAUDE.md`
