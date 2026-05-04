@@ -1,6 +1,6 @@
 ---
 name: notify-proof
-description: "Slack webhook for Proof document review requests. Sends a formatted notification with reviewer @-mentions when a document is posted to Proof for HITL review."
+description: "Post a Slack review-request notification with a link to a Proof document. Uses Slack bot token for delivery."
 ---
 
 # notify-proof
@@ -22,32 +22,51 @@ Collect the following from the current context or by asking the user:
 
 If any required field is missing from context, ask the user.
 
-### 2. Resolve the webhook URL
+### 2. Resolve credentials
 
-Read the Slack incoming webhook URL from the environment variable `SLACK_PROOF_WEBHOOK_URL`.
+Read these environment variables:
 
-If the variable is not set, tell the user:
+- `SLACK_BOT_TOKEN` — a Slack bot token starting with `xoxb-`
+- `SLACK_REVIEW_CHANNEL_ID` — the channel ID (e.g., `C07ABC123`) to post to
+
+If either variable is not set, tell the user:
 
 ```
-SLACK_PROOF_WEBHOOK_URL is not set. To configure it:
-1. Create a Slack incoming webhook at https://api.slack.com/messaging/webhooks
-2. Set the env var: export SLACK_PROOF_WEBHOOK_URL="https://hooks.slack.com/services/T.../B.../..."
+Slack bot credentials not found. See the setup guide:
+  docs/slack-bot-setup.md
+
+You need SLACK_BOT_TOKEN and SLACK_REVIEW_CHANNEL_ID in ~/.claude/settings.json
 ```
 
 Then stop — do not attempt to send.
 
 ### 3. Build the Slack message
 
-Construct a JSON payload using Slack Block Kit:
+**Sanitize text for Slack.** Before inserting any text into the payload, replace characters that don't survive the curl pipeline on all platforms:
+
+| Replace | With |
+|---|---|
+| `—` (em-dash) | ` -- ` |
+| `–` (en-dash) | `-` |
+| Smart single quotes | `'` |
+| Smart double quotes | `"` |
+| Ellipsis character | `...` |
+| Any other non-ASCII character (emoji, accented letters) | remove or substitute an ASCII equivalent |
+
+This applies to the document title, reviewer names, and context text.
+
+Construct a JSON payload using Slack Block Kit for `chat.postMessage`:
 
 ```json
 {
+  "channel": "SLACK_REVIEW_CHANNEL_ID",
   "blocks": [
     {
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "📝 Review requested"
+        "text": "Review requested",
+        "emoji": true
       }
     },
     {
@@ -83,18 +102,23 @@ If context was provided, append a section block:
 - Slack user IDs (matching `^U[A-Z0-9]+$`): format as `<@U07ABC123>`
 - Anything else: include as plain text (e.g., `@david`)
 
-### 4. Send the webhook
+### 4. Send the message
 
-Run:
+Write the JSON payload to a temporary file, then send with `curl`:
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}" -X POST \
-  -H "Content-Type: application/json" \
-  -d 'JSON_PAYLOAD' \
-  "$SLACK_PROOF_WEBHOOK_URL"
+curl -s -X POST \
+  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+  -H "Content-Type: application/json; charset=utf-8" \
+  --data-binary @/tmp/slack-payload.json \
+  https://slack.com/api/chat.postMessage
 ```
+
+Parse the JSON response. Check that `"ok": true` is present.
+
+Delete the temporary file after sending.
 
 ### 5. Report result
 
-- **HTTP 200**: Confirm the notification was sent. Show the channel and reviewers mentioned.
-- **Any other status**: Show the HTTP status code and suggest the user verify their webhook URL.
+- **ok: true**: Confirm the notification was sent. Show the channel and reviewers mentioned.
+- **ok: false**: Show the `error` field and direct the user to `docs/slack-bot-setup.md` for troubleshooting.
