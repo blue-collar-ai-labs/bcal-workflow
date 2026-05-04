@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "preCommit": [
+      {
+        "matcher": "skills/**",
+        "command": "powershell -NoProfile -Command \"$staged = git diff --cached --name-only; $skillsChanged = $staged | Where-Object { $_ -match '^skills/' }; $pluginChanged = $staged | Where-Object { $_ -match 'plugin\\.json$' }; if ($skillsChanged -and -not $pluginChanged) { Write-Error 'Skills changed but .claude-plugin/plugin.json version was not bumped. Bump the version so plugin updates are detected.'; exit 1 }\""
+      }
+    ]
+  }
+}
