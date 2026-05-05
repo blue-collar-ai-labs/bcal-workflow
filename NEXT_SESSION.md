@@ -1,9 +1,9 @@
-## Resume: bcal-workflow — Slack bot migration in progress
+## Resume: bcal-workflow — test new skill, plan next practices
 
 **Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Fixed notify-proof Unicode rendering (sanitization table for em-dashes, smart quotes). Migrated notify-proof from webhook to Slack bot token (`chat.postMessage`). Created notify-pdf skill (uploads PDFs via `files.upload`). Unified both skills on `SLACK_BOT_TOKEN` + `SLACK_REVIEW_CHANNEL_ID` with a shared setup guide. Old `SLACK_PROOF_WEBHOOK_URL` is no longer used.
+**Just completed:** Set up Slack bot credentials and verified notify-proof and notify-pdf end-to-end. Migrated notify-pdf to Slack's three-step upload API (files.upload was deprecated). Built `apply-claude-md-best-practices` skill with Wharton-informed UX — walks users through curated CLAUDE.md practices one at a time. Added lesson compounding step to end-session-gracefully. Bumped to 0.5.0.
 
-**Next task:** Set up the Slack bot credentials. The user already has a Slack app from the webhook setup — needs to check scopes (`chat:write`, `files:write`), grab the `xoxb-` token, get the channel ID, and add both to `~/.claude/settings.json`. Then test notify-proof end-to-end, followed by notify-pdf. Also: bump plugin version before shipping.
+**Next task:** Test `apply-claude-md-best-practices` in a repo with a bare CLAUDE.md (this repo already has both practices, so they'll be skipped). Then brainstorm additional practices to add to the catalog. Also consider whether the skill should create CLAUDE.md from scratch if one doesn't exist.
 
-**Read first:** `docs/slack-bot-setup.md`, `skills/notify-proof/SKILL.md`, `skills/notify-pdf/SKILL.md`
+**Read first:** `skills/apply-claude-md-best-practices/SKILL.md`, `skills/apply-claude-md-best-practices/practices/`
