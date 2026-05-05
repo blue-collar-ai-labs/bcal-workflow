@@ -48,8 +48,8 @@ Then stop -- do not attempt to send.
 
 | Replace | With |
 |---|---|
-| `---` (em-dash) | ` -- ` |
-| `--` (en-dash) | `-` |
+| `—` (em-dash) | ` -- ` |
+| `–` (en-dash) | `-` |
 | Smart single quotes | `'` |
 | Smart double quotes | `"` |
 | Ellipsis character | `...` |
@@ -73,19 +73,53 @@ Omit the Context line if no context was provided.
 
 ### 4. Upload the PDF
 
-Use the Slack `files.upload` API (v1) which handles both file upload and message posting in one call:
+The upload uses Slack's three-step file upload API.
+
+**Step 1 — Get an upload URL:**
 
 ```bash
-curl -s -F "token=$SLACK_BOT_TOKEN" \
-  -F "channels=$SLACK_REVIEW_CHANNEL_ID" \
-  -F "file=@PDF_PATH" \
-  -F "filename=FILENAME.pdf" \
-  -F "title=DOCUMENT_TITLE" \
-  -F "initial_comment=MESSAGE_TEXT" \
-  https://slack.com/api/files.upload
+FILESIZE=$(wc -c < "PDF_PATH" | tr -d ' ')
+curl -s -X POST \
+  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "filename=FILENAME.pdf" \
+  --data-urlencode "length=$FILESIZE" \
+  https://slack.com/api/files.getUploadURLExternal
 ```
 
-Parse the JSON response. Check that `"ok": true` is present.
+Parse the response. Extract `upload_url` and `file_id`. If `"ok": false`, stop and report the error.
+
+**Step 2 — Upload the file content:**
+
+```bash
+curl -s -X POST -F "file=@PDF_PATH" "$UPLOAD_URL"
+```
+
+The response should be `OK` followed by the byte count.
+
+**Step 3 — Complete the upload and share to channel:**
+
+Write a JSON payload to a temporary file, then send:
+
+```bash
+curl -s -X POST \
+  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+  -H "Content-Type: application/json; charset=utf-8" \
+  --data-binary @/tmp/slack-complete.json \
+  https://slack.com/api/files.completeUploadExternal
+```
+
+Payload:
+
+```json
+{
+  "files": [{"id": "FILE_ID", "title": "DOCUMENT_TITLE"}],
+  "channel_id": "SLACK_REVIEW_CHANNEL_ID",
+  "initial_comment": "MESSAGE_TEXT"
+}
+```
+
+Parse the response. Check that `"ok": true` is present. Delete the temporary file after sending.
 
 ### 5. Report result
 
@@ -94,3 +128,4 @@ Parse the JSON response. Check that `"ok": true` is present.
   - `not_authed` / `invalid_auth` — bad or missing bot token
   - `channel_not_found` — wrong channel ID or bot not invited to the channel
   - `not_in_channel` — bot needs to be invited: `/invite @BotName`
+  - `missing_scope` — bot needs the `files:write` scope

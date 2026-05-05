@@ -38,9 +38,22 @@ Use this commit format:
 
 Use the current agent's normal attribution format when the repo requires one. Do not invent a Claude-specific co-author line when the session was not run by Claude.
 
-### 4. Check for pending Proof reviews
+### 4. Offer to compound lessons
 
-Scan the current conversation for `proofeditor.ai` URLs (format: `https://www.proofeditor.ai/d/{slug}?token={token}`). If none exist, skip to step 5.
+Ask the user: "Want to look for any lessons worth compounding from this session?"
+
+If the user says **yes**:
+
+1. Review the session for compoundable insights — bugs solved, architecture decisions, patterns discovered, non-obvious fixes, or workflow improvements.
+2. Present a brief list of candidates (one line each). If none are found, say so and move on.
+3. If the user selects any, invoke `/ce-compound` for each selected lesson.
+4. If the repo has a `.brain-config`, ask whether to commit any compounded lessons to the configured brain using `/send-to-brain`.
+
+If the user says **no** or declines, move on without further prompting.
+
+### 5. Check for pending Proof reviews
+
+Scan the current conversation for `proofeditor.ai` URLs (format: `https://www.proofeditor.ai/d/{slug}?token={token}`). If none exist, skip to step 6.
 
 If at least one Proof link exists, take the **most recent** one and:
 
@@ -53,13 +66,13 @@ If at least one Proof link exists, take the **most recent** one and:
 3. From the response, count unresolved marks — entries in `marks` where `resolved` is `false`. Categorize by type (comments, suggestions).
 4. Identify the local file path that was sent to Proof during this session (look for the file read or referenced immediately before the Proof share in conversation context).
 
-Carry the following forward to step 5:
+Carry the following forward to step 6:
 - The full Proof URL (including the `?token=` parameter)
 - A one-line description of the document
 - The repo-relative path of the local source file
 - Counts of unresolved comments and suggestions (if any)
 
-### 5. Write the next-session prompt
+### 6. Write the next-session prompt
 
 Craft a tight, self-contained prompt the user can paste at the start of their next session. It should:
 - Remind the next agent of the project (name, purpose, current phase)
@@ -69,7 +82,7 @@ Craft a tight, self-contained prompt the user can paste at the start of their ne
 
 Keep it under 150 words (excluding the Proof section below).
 
-**If step 4 produced Proof review data**, append a `## Pending Proof Review` section to NEXT_SESSION.md:
+**If step 5 produced Proof review data**, append a `## Pending Proof Review` section to NEXT_SESSION.md:
 
 ```
 ## Pending Proof Review

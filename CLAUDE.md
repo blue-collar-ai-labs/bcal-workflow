@@ -24,6 +24,10 @@ Skill directories use kebab-case. The `name:` in SKILL.md frontmatter matches th
 - **MCP dependencies are optional.** `live-transcript` requires a Notion MCP server but degrades gracefully when unavailable. Skills that depend on external MCP servers must include a pre-flight check and clear setup instructions.
 - **Subagent isolation for large MCP reads.** When an MCP tool returns content much larger than what's needed (e.g., a full meeting transcript), delegate the read to a subagent that returns only the extracted subset. This protects the main context window.
 
+## Proof Integration
+
+When posting markdown documents to Proof (proofeditor.ai), always include YAML frontmatter from the source file if it exists. Do not strip or hide frontmatter — reviewers need to see metadata like client, type, and status in the rendered document.
+
 ## Documented Solutions
 
 `docs/solutions/` — documented solutions and architecture patterns from past work, organized by category with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when implementing or debugging skills in documented areas.

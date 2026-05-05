@@ -65,7 +65,7 @@ Construct a JSON payload using Slack Block Kit for `chat.postMessage`:
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "Review requested",
+        "text": ":clipboard: Review requested",
         "emoji": true
       }
     },
