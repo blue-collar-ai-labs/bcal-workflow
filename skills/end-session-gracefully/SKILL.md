@@ -88,7 +88,12 @@ ended_at: "<ISO 8601 timestamp, e.g. 2026-05-14T18:30:00Z>"
 ---
 ```
 
-**Finding the resume ID:** In Claude Code, determine the current session's UUID — the identifier that `claude --resume <id>` accepts. Check the agent runtime environment for this value. If the session ID is not discoverable, omit `resume_id` rather than guessing.
+**Finding the resume ID:** The Claude Code harness sets `CLAUDE_CODE_SESSION_ID` in the child process environment. Read it with the correct syntax for the shell you're using:
+
+- **Bash tool:** `printenv CLAUDE_CODE_SESSION_ID`
+- **PowerShell tool:** `$env:CLAUDE_CODE_SESSION_ID`
+
+Do not mix syntaxes (e.g., `$env:` in Bash will silently fail). If the variable is empty or unset, omit `resume_id` rather than guessing.
 
 Do not include `session_name` or `context_pct` — these are not reliably available and fabricated values are worse than no values. Only include fields you can report accurately. If `model` or `ended_at` are unavailable, omit them rather than writing `unknown`.
 

@@ -1,4 +1,5 @@
 ---
+resume_id: "a778e220-d365-4063-93e0-adc905e1cf21"
 model: "Opus 4.6 (1M context)"
 ended_at: "2026-05-14T16:48:00Z"
 ---
