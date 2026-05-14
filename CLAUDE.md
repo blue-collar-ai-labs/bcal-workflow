@@ -16,6 +16,8 @@ A skill is a directory under `skills/<skill-name>/` containing:
 
 Skill directories use kebab-case. The `name:` in SKILL.md frontmatter matches the directory name exactly.
 
+Bump `plugin.json` version only when user-facing plugin behavior changes (skill logic, new skills, removed skills). Repo-only files like `DIARY.csv`, `NEXT_SESSION.md`, `docs/solutions/`, and `CLAUDE.md` do not require a version bump.
+
 ## Architecture Decisions
 
 - **Agent-agnostic.** Skills use platform-specific question tools (`AskUserQuestion` for Claude Code, `request_user_input` for Codex, `ask_user` for Gemini) rather than hardcoding one agent's API.
