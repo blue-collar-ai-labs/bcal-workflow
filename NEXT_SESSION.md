@@ -1,15 +1,15 @@
 ---
-resume_id: "a778e220-d365-4063-93e0-adc905e1cf21"
+resume_id: "2775efcd-598f-4c20-9d94-5d05d1fdb9de"
 model: "Opus 4.6 (1M context)"
-ended_at: "2026-05-14T19:01:00Z"
+ended_at: "2026-05-14T22:45:00Z"
 ---
 
-## Resume: bcal-workflow — deterministic session ID discovery, ready for new work
+## bcal-workflow — hardened write-to-diary canonical format contract
 
 **Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Two features this session. (1) Added NEXT_SESSION.md status separation to apply-claude-md-best-practices skill (v0.9.0) — new steps ensure NEXT_SESSION.md exists and detect/move status duplication out of CLAUDE.md. (2) Fixed session ID discovery in end-session skill (v0.9.1) — replaced vague "check the environment" with explicit shell-specific commands (`printenv` for Bash, `$env:` for PowerShell). Compounded the shell-syntax lesson to bcal-brain.
+**Just completed:** Hardened write-to-diary skill's DIARY.csv format contract — defined canonical columns once in a dedicated section, broadened standardization to handle any non-standard header by semantic matching. Fixed three non-canonical DIARY.csv files across repos (ar-dormant-leads, claude-code-patterns, autoresearch-trading). Updated CLAUDE.md with plugin manifest locations (.claude-plugin and .codex-plugin have independent version series). Compounded the lesson and promoted to bcal-brain. Plugin at 0.9.2 / 0.5.1.
 
-**Next task:** Plugin is stable at 0.9.1. Consider testing the updated best-practices skill end-to-end on a repo without NEXT_SESSION.md. Alternatively, pick up other feature work or address open issues.
+**Next task:** No specific task queued. Good entry points: check if other skills have similar format-drift risks, or pick up new feature work.
 
-**Read first:** `CLAUDE.md`, `skills/end-session-gracefully/SKILL.md`, `skills/apply-claude-md-best-practices/SKILL.md`
+**Read first:** `CLAUDE.md`, `skills/write-to-diary/SKILL.md`, `.brain-config`
