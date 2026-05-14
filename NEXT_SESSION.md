@@ -1,14 +1,15 @@
 ---
+resume_id: "20b6c284-4823-4210-90a1-0d7cc5c946b4"
 model: "Opus 4.6 (1M context)"
-ended_at: "2026-05-14T14:01:00Z"
+ended_at: "2026-05-14T14:30:00Z"
 ---
 
-## Resume: bcal-workflow — test two-step start menu, sync installed skills
+## Resume: bcal-workflow — verify resume path in two-step menu
 
 **Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Redesigned start-session as a two-step AskUserQuestion menu: Step 1 chooses context window (fresh recommended, or resume old session via `claude --resume`), Step 2 chooses prompt (handoff recommended, or custom). Updated end-session-gracefully to store the real `resume_id` (Claude Code session UUID) and drop fabricated `session_name` and `context_pct` fields.
+**Just completed:** Synced installed plugin via /plugins, removed three orphan standalone skill copies from ~/.claude/skills/ that shadowed the plugin versions. Tested the two-step start-session menu (both steps worked). Tested end-session-gracefully — confirmed it discovers the real session UUID via CLAUDE_CODE_SESSION_ID env var. Compounded the orphan-skills lesson and promoted it to bcal-brain.
 
-**Next task:** Test start-session's new two-step menu in a fresh session. Verify the resume path shows the correct `claude --resume` command. Test end-session to confirm it discovers and stores the real session UUID. Sync installed skill copies under `~/.claude/skills/` with updated repo versions (run `/plugins` to update).
+**Next task:** Test the resume path in start-session: choose "Resume previous session" in Step 1 and verify it shows the correct `claude --resume 20b6c284-4823-4210-90a1-0d7cc5c946b4` command. Also test the "Something else" path in Step 2 to confirm it waits for user input.
 
 **Read first:** `skills/start-session/SKILL.md`, `skills/end-session-gracefully/SKILL.md`
