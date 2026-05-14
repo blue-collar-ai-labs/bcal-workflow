@@ -82,14 +82,15 @@ Write `NEXT_SESSION.md` at the repo root. Overwrite any existing content — thi
 
 ```yaml
 ---
-session_name: "<current session name — the auto-assigned or user-renamed session identifier>"
+resume_id: "<session ID that claude --resume accepts>"
 model: "<full model description, e.g. 'Opus 4.6 (1M context)'>"
-context_pct: <integer 0-100 — percentage of context window used, best estimate>
 ended_at: "<ISO 8601 timestamp, e.g. 2026-05-14T18:30:00Z>"
 ---
 ```
 
-All four fields are required. Report `model` and `context_pct` as accurately as you can from what the agent runtime exposes; if a value is unavailable, write `unknown`.
+**Finding the resume ID:** In Claude Code, determine the current session's UUID — the identifier that `claude --resume <id>` accepts. Check the agent runtime environment for this value. If the session ID is not discoverable, omit `resume_id` rather than guessing.
+
+Do not include `session_name` or `context_pct` — these are not reliably available and fabricated values are worse than no values. Only include fields you can report accurately. If `model` or `ended_at` are unavailable, omit them rather than writing `unknown`.
 
 #### Body
 
