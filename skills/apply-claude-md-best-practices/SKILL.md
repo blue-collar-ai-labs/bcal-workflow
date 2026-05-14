@@ -23,7 +23,7 @@ This skill follows the Wharton-derived design principles for AI agent adoption:
 
 Find the project's CLAUDE.md at the repo root. If it doesn't exist, ask the user whether to create one. If they decline, stop.
 
-Read the current contents of CLAUDE.md into memory for duplicate detection in step 3.
+Read the current contents of CLAUDE.md into memory for duplicate detection in later steps.
 
 ### 2. Offer structural audit (optional)
 
@@ -34,7 +34,46 @@ Ask the user:
 - If **yes**, invoke `/claude-md-management:claude-md-improver` and wait for it to complete before continuing.
 - If **no**, skip to step 3.
 
-### 3. Walk through practices
+### 3. Ensure NEXT_SESSION.md exists
+
+Check whether `NEXT_SESSION.md` exists at the repo root.
+
+- If it **exists**, continue to step 4.
+- If it **doesn't exist**, tell the user:
+
+  > "Your repo doesn't have a NEXT_SESSION.md yet. This is where project status and session context should live — keeping it out of CLAUDE.md so instructions stay durable. Want me to create a starter?"
+
+  If **yes**, create `NEXT_SESSION.md` with this template:
+
+  ```markdown
+  ## Resume: <project name>
+
+  **Project:** <one-line description>
+
+  **Just completed:** <blank — fill in at end of session>
+
+  **Next task:** <blank — fill in at end of session>
+
+  **Read first:** `CLAUDE.md`
+  ```
+
+  If **no**, note that the session-status-separation practice will still be offered, but without a NEXT_SESSION.md to point to it will be less useful.
+
+### 4. Check for status duplication in CLAUDE.md
+
+Scan CLAUDE.md for sections that contain project status rather than durable instructions. Look for patterns like:
+
+- Headings: `## Status`, `## Current Status`, `## Project Status`, `## What's Done`, `## Recent Changes`, `## Progress`
+- Content that describes recent work, completed tasks, or next steps (e.g., "Just completed", "Currently working on", "Next up")
+
+If duplicated status content is found:
+
+1. Show the user the specific sections that look like status.
+2. Ask: "These sections look like project status, which should live in NEXT_SESSION.md. Want me to move them there and remove them from CLAUDE.md?"
+   - **yes** — Move the content to NEXT_SESSION.md (merging with existing content if present) and remove the sections from CLAUDE.md.
+   - **no** — Skip. The user may have reasons to keep it.
+
+### 5. Walk through practices
 
 Read all practice files from `practices/` in this skill's directory. Each practice file has YAML frontmatter with `name`, `category`, and `detect` fields, plus a `## Why` section and a `## Snippet` section containing the markdown to add.
 
@@ -63,7 +102,7 @@ For each practice:
    - **no** — Skip. Move to the next practice.
    - **stop** — End the walkthrough immediately.
 
-### 4. Summary
+### 6. Summary
 
 After all practices have been presented (or the user stopped), show a brief summary:
 
