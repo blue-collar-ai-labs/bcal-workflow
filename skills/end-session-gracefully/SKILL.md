@@ -74,6 +74,25 @@ Carry the following forward to step 6:
 
 ### 6. Write the next-session prompt
 
+Write `NEXT_SESSION.md` at the repo root. Overwrite any existing content — this file always reflects the most recent session.
+
+#### Frontmatter
+
+`NEXT_SESSION.md` has YAML frontmatter that `start-session` reads to present the session-start menu. Include these fields:
+
+```yaml
+---
+session_name: "<current session name — the auto-assigned or user-renamed session identifier>"
+model: "<full model description, e.g. 'Opus 4.6 (1M context)'>"
+context_pct: <integer 0-100 — percentage of context window used, best estimate>
+ended_at: "<ISO 8601 timestamp, e.g. 2026-05-14T18:30:00Z>"
+---
+```
+
+All four fields are required. Report `model` and `context_pct` as accurately as you can from what the agent runtime exposes; if a value is unavailable, write `unknown`.
+
+#### Body
+
 Craft a tight, self-contained prompt the user can paste at the start of their next session. It should:
 - Remind the next agent of the project (name, purpose, current phase)
 - State what was just accomplished
@@ -82,7 +101,7 @@ Craft a tight, self-contained prompt the user can paste at the start of their ne
 
 Keep it under 150 words (excluding the Proof section below).
 
-**If step 5 produced Proof review data**, append a `## Pending Proof Review` section to NEXT_SESSION.md:
+**If step 5 produced Proof review data**, append a `## Pending Proof Review` section:
 
 ```
 ## Pending Proof Review
@@ -92,6 +111,6 @@ Keep it under 150 words (excluding the Proof section below).
 - **Unresolved:** <N comments, M suggestions — or "None" if all resolved>
 ```
 
-Write the prompt to `NEXT_SESSION.md` at the repo root. Overwrite any existing content — this file always reflects the most recent session. Also present it in a code block in the conversation so the user can act on it immediately.
+Also present the full file (frontmatter + body) in a code block in the conversation so the user can act on it immediately.
 
 Include `NEXT_SESSION.md` in the commit from step 3.

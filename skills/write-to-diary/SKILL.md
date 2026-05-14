@@ -15,11 +15,15 @@ Look for `DIARY.csv` in the repository root.
 
 If `DIARY.csv` does not exist, this is the first diary entry for this repo:
 - Create the file with the header row (see format below).
-- Ask the user: "Should DIARY.csv be added to .gitignore for this repo?" Then follow their answer.
+- Never add DIARY.csv to .gitignore — the diary is part of the repo's committed history.
 
 If `DIARY.md` exists, delete it — the CSV is the single diary format.
 
-### 2. Standardize existing DIARY.csv
+### 2. Check .gitignore
+
+If `.gitignore` exists and contains an entry matching `DIARY.csv`, tell the user it's currently gitignored and ask if they'd like it removed. If they agree, remove the entry. If they decline, continue without changing it.
+
+### 3. Standardize existing DIARY.csv
 
 If `DIARY.csv` already exists, check whether its header matches the current format:
 
@@ -32,7 +36,7 @@ If the header uses different column names (e.g., `When,What`), rewrite the file:
 - Add missing columns (`User`, `Agent`) with empty values for existing rows.
 - Preserve all existing data rows.
 
-### 3. Generate the timestamp
+### 4. Generate the timestamp
 
 Run:
 ```bash
@@ -43,12 +47,12 @@ The output must match this exact format: `2026-04-24 02:07 PM EDT`. Use 12-hour 
 
 On Windows (Git Bash), do NOT use `TZ='America/New_York'` — it silently falls back to GMT instead of converting. The default `date` command already uses the correct local timezone.
 
-### 4. Resolve the User and Agent fields
+### 5. Resolve the User and Agent fields
 
 - **User**: The current Git user's GitHub ID. Run `git config user.name` or use the known GitHub username (e.g., `dksmith01`). If unavailable, leave blank.
 - **Agent**: The coding agent running this session. Use `Claude Code` or `Codex` as appropriate. If unknown, leave blank.
 
-### 5. Write the diary entry
+### 6. Write the diary entry
 
 Summarize the session's work in 1-3 clear, jargon-free sentences. Write as if explaining to a colleague what you got done today. No bullet points, no technical deep-dives — just a plain-English record.
 
@@ -61,6 +65,6 @@ Datetime,User,Agent,Description
 
 Append new rows to the bottom. Always quote all fields to handle commas in the summary. Do not rewrite existing rows.
 
-### 6. Report
+### 7. Report
 
 Show the entry that was written. Do not ask for confirmation or revision — just write it and move on.
