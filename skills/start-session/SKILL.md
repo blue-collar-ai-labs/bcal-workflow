@@ -39,7 +39,28 @@ If `NEXT_SESSION.md` does not exist, say:
 No previous session handoff found. What would you like to work on?
 ```
 
-### 3. Act on the choice
+### 3. Check for plugin updates
+
+Check whether any installed plugins from BCAL marketplaces have updates available.
+
+1. Read `~/.claude/plugins/installed_plugins.json` to get installed plugin versions.
+2. For each plugin installed from a marketplace whose name starts with `bcal-` (e.g., `bcal-agent-plugins`, `bcal-codex-plugins`):
+   - Find the marketplace clone at `~/.claude/plugins/marketplaces/{marketplace}/`.
+   - Look up the plugin's source repo in the marketplace's `.claude-plugin/marketplace.json`.
+   - Read the remote plugin's version from its `plugin.json` in the marketplace clone's cached data, or by checking the plugin's source repo if the marketplace lists it.
+   - Compare the installed version against the available version.
+3. If any plugins have a newer version available, show a brief notice after the session menu:
+
+```
+Plugin updates available:
+  - <plugin-name>: <installed-version> → <available-version>
+
+Run /plugins to update.
+```
+
+If no updates are available, or if `installed_plugins.json` doesn't exist, skip silently.
+
+### 4. Act on the choice
 
 - If the user picks **1**, execute the handoff prompt body from `NEXT_SESSION.md` as if the user had pasted it.
 - If the user picks **2** or describes a task, proceed with that task.
