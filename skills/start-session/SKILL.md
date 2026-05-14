@@ -65,23 +65,10 @@ Use `AskUserQuestion` to present:
 
 **If the user chooses "Something else"**, wait for the user to describe their task, then proceed with it.
 
-### 4. Check for plugin updates
+### 4. Plugin update reminder
 
-After presenting the menu (regardless of which step the user is on), check whether any installed plugins from BCAL marketplaces have updates available.
-
-1. Read `~/.claude/plugins/installed_plugins.json` to get installed plugin versions.
-2. For each plugin installed from a marketplace whose name starts with `bcal-` (e.g., `bcal-agent-plugins`, `bcal-codex-plugins`):
-   - Find the marketplace clone at `~/.claude/plugins/marketplaces/{marketplace}/`.
-   - Look up the plugin's source repo in the marketplace's `.claude-plugin/marketplace.json`.
-   - Read the remote plugin's version from its `plugin.json` in the marketplace clone's cached data, or by checking the plugin's source repo if the marketplace lists it.
-   - Compare the installed version against the available version.
-3. If any plugins have a newer version available, show a brief notice:
+If `NEXT_SESSION.md` existed (i.e., this is a returning user), append a one-liner after the menu completes:
 
 ```
-Plugin updates available:
-  - <plugin-name>: <installed-version> → <available-version>
-
-Run /plugins to update.
+Tip: Run /plugin to check for plugin updates.
 ```
-
-If no updates are available, or if `installed_plugins.json` doesn't exist, skip silently.
