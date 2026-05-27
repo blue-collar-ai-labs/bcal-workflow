@@ -1,6 +1,6 @@
 {
   "name": "bcal-workflow",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Agent-agnostic workflow skills for session lifecycle management.",
   "author": {
     "name": "Blue Collar AI Labs",
