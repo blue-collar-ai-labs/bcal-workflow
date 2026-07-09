@@ -28,7 +28,9 @@ Bump plugin manifest versions only when user-facing plugin behavior changes (ski
 
 ## Proof Integration
 
-When posting markdown documents to Proof (proofeditor.ai), always include YAML frontmatter from the source file if it exists. Do not strip or hide frontmatter — reviewers need to see metadata like client, type, and status in the rendered document.
+Run the `prep-for-proof` skill before uploading any markdown to Proof (proofeditor.ai), and upload the prepped `<name>.prepped.md` output, not the raw source. Write one logical line per paragraph for Proof- or email-bound prose — never hard-wrap at a column.
+
+When posting, keep YAML frontmatter from the source file visible — the prep step preserves it as a fenced yaml code block. Do not strip or hide frontmatter; reviewers need to see metadata like client, type, and status in the rendered document.
 
 ## Documented Solutions
 

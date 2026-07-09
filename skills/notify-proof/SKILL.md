@@ -22,6 +22,8 @@ Collect the following from the current context or by asking the user:
 
 If any required field is missing from context, ask the user.
 
+**Prep check**: Confirm the document posted to Proof was prepared with the `prep-for-proof` skill (the uploaded file passes its `--check`). If it was not, offer to prep and re-upload before notifying reviewers — un-prepped documents render broken in Proof and derail the review.
+
 ### 2. Resolve credentials
 
 Read these environment variables:

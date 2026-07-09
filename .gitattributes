@@ -1,0 +1,3 @@
+# prep-for-proof fixtures are compared byte-exact in tests; never let git
+# translate their line endings on checkout.
+skills/prep-for-proof/scripts/fixtures/* -text

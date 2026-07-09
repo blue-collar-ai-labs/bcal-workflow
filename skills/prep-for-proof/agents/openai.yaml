@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prep For Proof"
+  short_description: "Preprocess markdown for clean Proof rendering before upload"
+  default_prompt: "Use $prep-for-proof to prepare this markdown file for upload to Proof."

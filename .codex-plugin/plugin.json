@@ -1,6 +1,6 @@
 {
   "name": "bcal-workflow",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Agent-agnostic workflow skills for session lifecycle management.",
   "author": {
     "name": "Blue Collar AI Labs",
@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "BCAL Workflow",
     "shortDescription": "Session lifecycle skills",
-    "longDescription": "BCAL Workflow provides reusable skills for starting sessions, ending sessions gracefully, writing diary entries, sending Proof notifications, and working with live transcripts.",
+    "longDescription": "BCAL Workflow provides reusable skills for starting sessions, ending sessions gracefully, writing diary entries, preparing markdown for Proof uploads, sending Proof notifications, and working with live transcripts.",
     "developerName": "Blue Collar AI Labs",
     "category": "Productivity",
     "capabilities": [
