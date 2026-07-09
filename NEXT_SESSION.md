@@ -14,7 +14,6 @@ ended_at: "2026-07-09T20:27:00Z"
 
 **Next task (pick one):**
 1. Exercise a real release: bump both manifests to `1.0.1` via a PR touching a skill, confirm the check passes and `/plugin update` detects it.
-2. The local `.git/hooks/pre-commit` is now stale (checks only `skills/`, not `hooks/`, and only one manifest) and isn't version-controlled — decide whether to ship a hook-installer script or drop it in favor of CI.
-3. Decide the fate of the two cited-but-missing docs (`no-squash-merge-versioned-plugin-release.md`, `institutional-learnings-must-be-conventions-2026-05-27.md`) — create or drop the references.
+2. Decide the fate of the two cited-but-missing docs (`no-squash-merge-versioned-plugin-release.md`, `institutional-learnings-must-be-conventions-2026-05-27.md`) — create or drop the references.
 
 **Read first:** `CLAUDE.md`, `docs/solutions/architecture-patterns/enforce-institutional-rules-in-ci-not-prose.md`, `docs/plans/2026-07-09-002-feat-release-discipline-enforcement-plan.md`
