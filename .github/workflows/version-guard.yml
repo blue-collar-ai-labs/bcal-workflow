@@ -1,0 +1,47 @@
+name: version-guard
+
+# Fails a PR to main that changes plugin source (skills/ or hooks/) without
+# bumping BOTH manifests to the same new value. The rule lives in
+# .github/scripts/check-version-bump.mjs (unit-tested); this workflow only
+# gathers git data and invokes it.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  version-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Require lockstep manifest bump when plugin source changes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          version() {
+            local json
+            json=$(git show "$1:$2" 2>/dev/null || echo '{}')
+            jq -r '.version // ""' <<<"$json"
+          }
+
+          CLAUDE_BASE=$(version "$BASE_SHA" ".claude-plugin/plugin.json")
+          CODEX_BASE=$(version "$BASE_SHA" ".codex-plugin/plugin.json")
+          CLAUDE_HEAD=$(version "$HEAD_SHA" ".claude-plugin/plugin.json")
+          CODEX_HEAD=$(version "$HEAD_SHA" ".codex-plugin/plugin.json")
+
+          # Three-dot diff on a full-history checkout: changed paths introduced
+          # by the PR head relative to the merge base with the PR base.
+          git diff --name-only "$BASE_SHA...$HEAD_SHA" \
+            | node .github/scripts/check-version-bump.mjs \
+                --claude-base "$CLAUDE_BASE" --codex-base "$CODEX_BASE" \
+                --claude-head "$CLAUDE_HEAD" --codex-head "$CODEX_HEAD"
