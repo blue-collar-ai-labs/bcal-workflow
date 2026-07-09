@@ -1,14 +1,14 @@
 ---
 resume_id: "f49349d3-4ce6-4e82-9aca-ac51dde8c9f7"
 model: "Opus 4.8 (1M context)"
-ended_at: "2026-07-09T20:27:00Z"
+ended_at: "2026-07-09T21:49:33Z"
 ---
 
 ## bcal-workflow — release discipline is now mechanically enforced
 
 **Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Shipped release-discipline enforcement. Both plugin manifests were unified onto one shared version (`1.0.0`), and a CI `version-guard` check (pure unit-tested rule in `.github/scripts/check-version-bump.mjs` + `.github/workflows/version-guard.yml`) now fails any PR that changes `skills/` or `hooks/` without bumping both manifests to the same new value. Squash/rebase merge are disabled; the check is a **required** status check on `main` with `strict` + `enforce_admins`. Verified end-to-end on a scratch PR. Also refreshed stale docs + README, and compounded the enforcement lesson to `docs/solutions/architecture-patterns/` and bcal-brain.
+**Just completed:** Shipped release-discipline enforcement. Both plugin manifests were unified onto one shared version (`1.0.0`), and a CI `version-guard` check (pure unit-tested rule in `.github/scripts/check-version-bump.mjs` + `.github/workflows/version-guard.yml`) now fails any PR that changes `skills/` or `hooks/` without bumping both manifests to the same new value. Squash/rebase merge are disabled; the check is a **required** status check on `main` with `strict` + `enforce_admins`. Verified end-to-end on a scratch PR. Also refreshed stale docs + README, compounded the enforcement lesson to `docs/solutions/architecture-patterns/` and bcal-brain, and retired the now-redundant machine-local `.git/hooks/pre-commit` guard (CI + branch protection is the sole enforcement layer).
 
 **Consequence to know:** `main` is now protected — **direct pushes are blocked; all changes go through a PR** (repo-only doc PRs pass `version-guard` automatically). Releases now require bumping **both** manifests to the same value.
 
