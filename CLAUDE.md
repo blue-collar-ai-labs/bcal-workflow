@@ -16,9 +16,9 @@ A skill is a directory under `skills/<skill-name>/` containing:
 
 Skill directories use kebab-case. The `name:` in SKILL.md frontmatter matches the directory name exactly.
 
-The plugin also ships Claude Code hooks: `hooks/hooks.json` registers them, hook scripts live in `hooks/scripts/`. Executable code (skill scripts, hook scripts) is Node stdlib only, tested via `node --test "skills/prep-for-proof/scripts/*.test.mjs" "hooks/scripts/*.test.mjs"`.
+The plugin also ships Claude Code hooks: `hooks/hooks.json` registers them, hook scripts live in `hooks/scripts/`. Executable code (skill scripts, hook scripts, CI scripts) is Node stdlib only, tested via `node --test "skills/prep-for-proof/scripts/*.test.mjs" "hooks/scripts/*.test.mjs" ".github/scripts/*.test.mjs"`.
 
-Bump plugin manifest versions only when user-facing plugin behavior changes (skill logic, new skills, removed skills, hook behavior). Manifests: `.claude-plugin/plugin.json` (Claude Code, `0.9.x` series) and `.codex-plugin/plugin.json` (Codex, `0.5.x` series) — bump both, each in its own series. Repo-only files like `DIARY.csv`, `NEXT_SESSION.md`, `docs/solutions/`, and `CLAUDE.md` do not require a version bump.
+The two manifests carry one shared version, bumped in lockstep to the same new value on every release: `.claude-plugin/plugin.json` (read by Claude Code) and `.codex-plugin/plugin.json` (read by Codex). Because a release is detected purely by the version string, any change under `skills/` or `hooks/` must bump **both** manifests to the same new value — CI enforces this on PRs to `main` (see `docs/solutions/plugin-version-bump-update-detection-2026-05-04.md`), since a source change that ships without a bump reaches nobody. Repo-only files (`docs/`, `README.md`, `CLAUDE.md`, `CONCEPTS.md`, `DIARY.csv`, `NEXT_SESSION.md`) do not require a version bump.
 
 ## Architecture Decisions
 

@@ -50,9 +50,10 @@ Here are 8 best practices for your CLAUDE.md. Which ones do you want? (1-8)
 ```
 **Practice: Proof frontmatter preservation** (tooling)
 
-Tells the agent to always include YAML frontmatter when posting
-to Proof, if the original file has frontmatter. Reviewers need
-to see metadata like client, type, and status.
+Keeps YAML frontmatter visible when posting to Proof --
+preserved as a fenced yaml code block, never stripped and never
+left as raw --- delimiters. Reviewers need to see metadata like
+client, type, and status.
 
 Here's what would be added to your CLAUDE.md:
 [preview snippet]

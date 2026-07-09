@@ -20,7 +20,9 @@ After installing, type `/` and look for:
 - `bcal-workflow:write-to-diary`
 - `bcal-workflow:prep-for-proof`
 - `bcal-workflow:notify-proof`
+- `bcal-workflow:notify-pdf`
 - `bcal-workflow:live-transcript`
+- `bcal-workflow:apply-claude-md-best-practices`
 
 ## Install (Codex)
 
@@ -41,7 +43,9 @@ The plugin publishes Codex metadata in `.codex-plugin/plugin.json` and exposes t
 | write-to-diary | `/bcal-workflow:write-to-diary` | Append a session summary to `DIARY.csv` |
 | prep-for-proof | `/bcal-workflow:prep-for-proof` | Preprocess markdown (frontmatter, unicode, unwrapping) before uploading to Proof |
 | notify-proof | `/bcal-workflow:notify-proof` | Send a Slack notification when a doc is posted to Proof for review |
+| notify-pdf | `/bcal-workflow:notify-pdf` | Upload a PDF to a Slack channel with a review-request message |
 | live-transcript | `/bcal-workflow:live-transcript` | Capture group discussion from a live Notion transcript and synthesize an answer |
+| apply-claude-md-best-practices | `/bcal-workflow:apply-claude-md-best-practices` | Walk through curated CLAUDE.md best practices one at a time, choosing which to apply |
 
 ### live-transcript setup
 
@@ -51,12 +55,13 @@ Requires a Notion MCP server configured in your session. The skill uses the MCP 
 2. Configure it with a Notion API integration token that has access to your transcript pages
 3. Add the MCP server to your Claude Code or agent configuration
 
-### notify-proof setup
+### notify-proof / notify-pdf setup
 
-Requires a Slack incoming webhook URL set as an environment variable:
+Both Slack skills use the Slack Web API with a bot token. Set these environment variables:
 
 ```bash
-export SLACK_PROOF_WEBHOOK_URL="https://hooks.slack.com/services/T.../B.../..."
+export SLACK_BOT_TOKEN="xoxb-..."          # bot token
+export SLACK_REVIEW_CHANNEL_ID="C07ABC123" # channel to post to
 ```
 
 ## Tests
