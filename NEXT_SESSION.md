@@ -1,15 +1,18 @@
 ---
-resume_id: "2775efcd-598f-4c20-9d94-5d05d1fdb9de"
-model: "Opus 4.6 (1M context)"
-ended_at: "2026-05-14T22:45:00Z"
+resume_id: "b43cc2a6-96fc-4c0e-9ad3-7de7a885e8aa"
+model: "Fable 5"
+ended_at: "2026-07-09T18:52:43Z"
 ---
 
-## bcal-workflow — hardened write-to-diary canonical format contract
+## bcal-workflow — shipped prep-for-proof skill and first plugin hook
 
 **Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Hardened write-to-diary skill's DIARY.csv format contract — defined canonical columns once in a dedicated section, broadened standardization to handle any non-standard header by semantic matching. Fixed three non-canonical DIARY.csv files across repos (ar-dormant-leads, claude-code-patterns, autoresearch-trading). Updated CLAUDE.md with plugin manifest locations (.claude-plugin and .codex-plugin have independent version series). Compounded the lesson and promoted to bcal-brain. Plugin at 0.9.2 / 0.5.1.
+**Just completed:** Shipped `prep-for-proof` (v0.9.4 / 0.5.3): zero-dependency Node script (frontmatter→fenced yaml, ASCII normalization, block-safe unwrapping, fixpoint `--check`), the repo's first PreToolUse hook (`hooks/`) blocking un-prepped Proof uploads, guidance wiring across CLAUDE.md/notify-proof/practice library, 40 passing tests plus real-harness smokes via `claude --plugin-dir`. Compounded the hook-design lesson to `docs/solutions/architecture-patterns/` and bcal-brain; created `CONCEPTS.md`.
 
-**Next task:** No specific task queued. Good entry points: check if other skills have similar format-drift risks, or pick up new feature work.
+**Next task:**
+1. Verify the marketplace picked up 0.9.4 on a consuming machine (`/plugins` update, `/reload-plugins`, invoke `bcal-workflow:prep-for-proof`).
+2. Run `/ce-compound-refresh plugin-version-bump-update-detection` — that doc claims a pre-commit guard that no longer exists and a single-manifest world; the wharton-principles doc also quotes the old frontmatter practice wording.
+3. Optional: fix deferred README staleness (missing notify-pdf and apply-claude-md-best-practices rows; wrong notify-proof env vars).
 
-**Read first:** `CLAUDE.md`, `skills/write-to-diary/SKILL.md`, `.brain-config`
+**Read first:** `CLAUDE.md`, `CONCEPTS.md`, `skills/prep-for-proof/SKILL.md`

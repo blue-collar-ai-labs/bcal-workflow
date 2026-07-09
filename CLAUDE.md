@@ -16,7 +16,9 @@ A skill is a directory under `skills/<skill-name>/` containing:
 
 Skill directories use kebab-case. The `name:` in SKILL.md frontmatter matches the directory name exactly.
 
-Bump plugin manifest versions only when user-facing plugin behavior changes (skill logic, new skills, removed skills). Manifests: `.claude-plugin/plugin.json` (Claude Code, `0.9.x` series) and `.codex-plugin/plugin.json` (Codex, `0.5.x` series) — bump both, each in its own series. Repo-only files like `DIARY.csv`, `NEXT_SESSION.md`, `docs/solutions/`, and `CLAUDE.md` do not require a version bump.
+The plugin also ships Claude Code hooks: `hooks/hooks.json` registers them, hook scripts live in `hooks/scripts/`. Executable code (skill scripts, hook scripts) is Node stdlib only, tested via `node --test "skills/prep-for-proof/scripts/*.test.mjs" "hooks/scripts/*.test.mjs"`.
+
+Bump plugin manifest versions only when user-facing plugin behavior changes (skill logic, new skills, removed skills, hook behavior). Manifests: `.claude-plugin/plugin.json` (Claude Code, `0.9.x` series) and `.codex-plugin/plugin.json` (Codex, `0.5.x` series) — bump both, each in its own series. Repo-only files like `DIARY.csv`, `NEXT_SESSION.md`, `docs/solutions/`, and `CLAUDE.md` do not require a version bump.
 
 ## Architecture Decisions
 
