@@ -76,3 +76,5 @@ Append a new row using the canonical column order. Double-quote all fields. Do n
 ### 7. Report
 
 Show the entry that was written. Do not ask for confirmation or revision — just write it and move on.
+
+<!-- version-guard scratch test: delete this branch -->
