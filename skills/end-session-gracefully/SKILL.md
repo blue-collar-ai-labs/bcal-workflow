@@ -78,24 +78,16 @@ Write `NEXT_SESSION.md` at the repo root. Overwrite any existing content — thi
 
 #### Frontmatter
 
-`NEXT_SESSION.md` has YAML frontmatter that `start-session` reads to present the session-start menu. Include these fields:
+`NEXT_SESSION.md` has YAML frontmatter that `start-session` reads when presenting the handoff prompt. Include these fields:
 
 ```yaml
 ---
-resume_id: "<session ID that claude --resume accepts>"
 model: "<full model description, e.g. 'Opus 4.6 (1M context)'>"
 ended_at: "<ISO 8601 timestamp, e.g. 2026-05-14T18:30:00Z>"
 ---
 ```
 
-**Finding the resume ID:** The Claude Code harness sets `CLAUDE_CODE_SESSION_ID` in the child process environment. Read it with the correct syntax for the shell you're using:
-
-- **Bash tool:** `printenv CLAUDE_CODE_SESSION_ID`
-- **PowerShell tool:** `$env:CLAUDE_CODE_SESSION_ID`
-
-Do not mix syntaxes (e.g., `$env:` in Bash will silently fail). If the variable is empty or unset, omit `resume_id` rather than guessing.
-
-Do not include `session_name` or `context_pct` — these are not reliably available and fabricated values are worse than no values. Only include fields you can report accurately. If `model` or `ended_at` are unavailable, omit them rather than writing `unknown`.
+Do not include `resume_id` — nothing reads it now that agentic harnesses handle session resumption themselves. Do not include `session_name` or `context_pct` — these are not reliably available and fabricated values are worse than no values. Only include fields you can report accurately. If `model` or `ended_at` are unavailable, omit them rather than writing `unknown`.
 
 #### Body
 

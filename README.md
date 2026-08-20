@@ -38,7 +38,7 @@ The plugin publishes Codex metadata in `.codex-plugin/plugin.json` and exposes t
 
 | Skill | Command | Description |
 |---|---|---|
-| start-session | `/bcal-workflow:start-session` | Resume from `NEXT_SESSION.md` or start fresh |
+| start-session | `/bcal-workflow:start-session` | Run the handoff prompt from `NEXT_SESSION.md` or start on something else |
 | end-session-gracefully | `/bcal-workflow:end-session-gracefully` | Commit, push, update project status, write a handoff prompt |
 | write-to-diary | `/bcal-workflow:write-to-diary` | Append a session summary to `DIARY.csv` |
 | prep-for-proof | `/bcal-workflow:prep-for-proof` | Preprocess markdown (frontmatter, unicode, unwrapping) before uploading to Proof |

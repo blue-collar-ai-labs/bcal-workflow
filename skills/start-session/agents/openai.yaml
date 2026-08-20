@@ -1,4 +1,4 @@
 interface:
   display_name: "Start Session"
-  short_description: "Resume from last session or start fresh"
+  short_description: "Pick up the previous session's handoff prompt"
   default_prompt: "Use $start-session to begin."
