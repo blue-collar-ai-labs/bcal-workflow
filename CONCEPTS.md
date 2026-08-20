@@ -40,6 +40,9 @@ The CI check that fails a pull request changing plugin source without a lockstep
 ### Cached plugin copy
 The installed copy of a plugin that a session actually executes, as distinct from the repo working tree where the plugin is developed. The two diverge whenever the repo is edited, and converge only when the user updates the plugin — so a repo that ships the skills used to develop it always executes a version at least one release behind its own source.
 
+### Orphan copy
+A skill left behind at a location an earlier install mechanism used, which shadows the plugin-delivered version of the same skill. It is distinct from a stale cached plugin copy: the plugin system is unaware the orphan exists, so updating the plugin never resolves it — the orphan has to be removed by hand.
+
 ## Session lifecycle
 
 ### Handoff prompt
