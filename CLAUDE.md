@@ -20,6 +20,8 @@ The plugin also ships Claude Code hooks: `hooks/hooks.json` registers them, hook
 
 The two manifests carry one shared version, bumped in lockstep to the same new value on every release: `.claude-plugin/plugin.json` (read by Claude Code) and `.codex-plugin/plugin.json` (read by Codex). Because a release is detected purely by the version string, any change under `skills/` or `hooks/` must bump **both** manifests to the same new value — CI enforces this on PRs to `main` (see `docs/solutions/plugin-version-bump-update-detection-2026-05-04.md`), since a source change that ships without a bump reaches nobody. Repo-only files (`docs/`, `README.md`, `CLAUDE.md`, `CONCEPTS.md`, `DIARY.csv`, `NEXT_SESSION.md`) do not require a version bump.
 
+This plugin ships the skills a session here is likely running, so an invoked skill executes the installed cached copy, not the working tree. After editing a skill, follow `skills/<name>/SKILL.md` in the repo rather than the instructions that arrived with the invocation, and say so when they disagree (see `docs/solutions/workflow-issues/plugin-cache-lags-the-source-repo-during-development.md`).
+
 ## Architecture Decisions
 
 - **Agent-agnostic.** Skills use platform-specific question tools (`AskUserQuestion` for Claude Code, `request_user_input` for Codex, `ask_user` for Gemini) rather than hardcoding one agent's API.

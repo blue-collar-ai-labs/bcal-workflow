@@ -29,6 +29,22 @@ The convention that any file format a skill produces or normalizes is defined ex
 ### Practice
 A unit of paste-able CLAUDE.md guidance in the best-practices library. Each practice carries a what/why explanation, the exact snippet to paste, and a detection pattern used to tell whether a target CLAUDE.md already applies it. Detection patterns must not match sibling practices' snippets, or applying one practice masks another.
 
+## Release and distribution
+
+### Lockstep bump
+The rule that a release sets one shared version string across every plugin manifest this project ships, always to the same new value. Because an update is detected purely by that string, a manifest left behind means the agents reading it never see the release at all.
+
+### Version guard
+The CI check that fails a pull request changing plugin source without a lockstep bump. It is the sole enforcement layer for release discipline — the rule lives in a tested, pure function, and the workflow only feeds it git data.
+
+### Cached plugin copy
+The installed copy of a plugin that a session actually executes, as distinct from the repo working tree where the plugin is developed. The two diverge whenever the repo is edited, and converge only when the user updates the plugin — so a repo that ships the skills used to develop it always executes a version at least one release behind its own source.
+
+## Session lifecycle
+
+### Handoff prompt
+The self-contained body of the next-session file: what the project is, what the last session finished, and the specific next task, written so it can be pasted cold into a fresh session. It is the payload the session-closeout skill produces and the session-start skill offers; the surrounding frontmatter carries only what can be reported accurately, never a fabricated value.
+
 ## Flagged ambiguities
 
 - "Sanitize" and "prep" had overlapping punctuation mappings and were at risk of being used interchangeably — these are distinct: sanitizing makes text survive the Slack curl transport (notify-proof's payload table); prepping makes a whole document render correctly in Proof.

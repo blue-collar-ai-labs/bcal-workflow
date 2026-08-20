@@ -1,19 +1,18 @@
 ---
-resume_id: "f49349d3-4ce6-4e82-9aca-ac51dde8c9f7"
-model: "Opus 4.8 (1M context)"
-ended_at: "2026-07-09T21:49:33Z"
+model: "Opus 5"
+ended_at: "2026-08-20T15:20:00Z"
 ---
 
-## bcal-workflow — release discipline is now mechanically enforced
+## bcal-workflow — start-session simplified, shipped as 1.1.0
 
 **Project:** bcal-workflow plugin (agent-agnostic workflow skills, bcal-agent-plugins marketplace). Connected to bcal-brain.
 
-**Just completed:** Shipped release-discipline enforcement. Both plugin manifests were unified onto one shared version (`1.0.0`), and a CI `version-guard` check (pure unit-tested rule in `.github/scripts/check-version-bump.mjs` + `.github/workflows/version-guard.yml`) now fails any PR that changes `skills/` or `hooks/` without bumping both manifests to the same new value. Squash/rebase merge are disabled; the check is a **required** status check on `main` with `strict` + `enforce_admins`. Verified end-to-end on a scratch PR. Also refreshed stale docs + README, compounded the enforcement lesson to `docs/solutions/architecture-patterns/` and bcal-brain, and retired the now-redundant machine-local `.git/hooks/pre-commit` guard (CI + branch protection is the sole enforcement layer).
+**Just completed:** Removed `start-session`'s first menu step (fresh vs. resume a previous context window) — Claude Code and Codex resume natively now. Followed the dead data upstream: `end-session-gracefully` no longer writes `resume_id` or reads `CLAUDE_CODE_SESSION_ID`. Released as **1.1.0** via a lockstep manifest bump and a green `version-guard` PR, which also closed out the "exercise a real release" item from last session. Compounded two lessons to `docs/solutions/`, seeded release/distribution and session-lifecycle terms in `CONCEPTS.md`, and pruned all merged branches (`main` is the only branch on the remote).
 
-**Consequence to know:** `main` is now protected — **direct pushes are blocked; all changes go through a PR** (repo-only doc PRs pass `version-guard` automatically). Releases now require bumping **both** manifests to the same value.
+**Know before you edit a skill:** this repo ships the skills your session is running, so an invoked skill executes the *installed cached copy*, not the working tree. Follow `skills/<name>/SKILL.md` in the repo and run `/plugin` after a release.
 
 **Next task (pick one):**
-1. Exercise a real release: bump both manifests to `1.0.1` via a PR touching a skill, confirm the check passes and `/plugin update` detects it.
-2. Decide the fate of the two cited-but-missing docs (`no-squash-merge-versioned-plugin-release.md`, `institutional-learnings-must-be-conventions-2026-05-27.md`) — create or drop the references.
+1. Decide the fate of two cited-but-missing docs: `no-squash-merge-versioned-plugin-release.md` and `institutional-learnings-must-be-conventions-2026-05-27.md` — create them or drop the references.
+2. Consolidation review of the two overlapping stale-skill docs: `workflow-issues/standalone-to-plugin-skill-migration-orphans-2026-05-14.md` and the new `workflow-issues/plugin-cache-lags-the-source-repo-during-development.md` (`/ce-compound-refresh plugin-distribution`).
 
-**Read first:** `CLAUDE.md`, `docs/solutions/architecture-patterns/enforce-institutional-rules-in-ci-not-prose.md`, `docs/plans/2026-07-09-002-feat-release-discipline-enforcement-plan.md`
+**Read first:** `CLAUDE.md`, `CONCEPTS.md`, `docs/solutions/workflow-issues/plugin-cache-lags-the-source-repo-during-development.md`
