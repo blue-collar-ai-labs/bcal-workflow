@@ -57,6 +57,23 @@ Use `.brain-config` for this repo's sensitivity, domain tags, and configured bra
 
 Use `/start` at the beginning of a session to check for a previous session handoff and choose how to proceed.
 
+## Claim Discipline
+
+**No surfaced error is not proof of success.** Before calling anything fixed, verified, or working, name which of these you have: **deployed** / **built-not-deployed** / **measured-not-built** / **not-started**.
+
+- **A probe is not a confirmed fix.** A theory that explains the symptom is a *candidate* until an artifact in the system of record confirms it. Say "candidate" until then.
+- **Your own success telemetry is not evidence of what the other side saw.** A server that runs correctly when you launch it says nothing about how a different caller launches it. A send that reports success says nothing about receipt.
+- **A negative result is not proof of absence** — from a sub-agent, a search, or a log query. Check the retention window, the scope, and the namespace before concluding "nothing there."
+- **Verify the specific operation, not an adjacent one.** Read access does not prove write access; a green deploy does not prove the version moved; a passing test suite does not prove the failing path is covered.
+
+This is the highest-recurrence lesson family in the connected brains, and it has repeatedly failed to fire because it lived only in `NEXT_SESSION.md`, which is rewritten every session. It belongs here, where it persists.
+
+## Shell Tooling (Windows)
+
+On Windows, the Bash tool and the Read/Write tools do not share a filesystem namespace:
+
+- **`/tmp` is two different directories.** Read/Write tools resolve `/tmp/...` to `C:/tmp/...`; the Bash tool's `/tmp` is the separate MSYS mount. A file written by one family is **invisible to the other at the identical path string**. Read with the tool family that wrote, and when a read fails right after a confirmed write, check the other namespace (`ls -la /tmp/...` vs `ls -la /c/tmp/...`) before concluding the write failed — the misleading part is that "file does not exist" looks exactly like a step that never produced its output. For any handoff between tools, use the scratchpad directory or an absolute `C:/...` path, never a bare `/tmp/...`.
+
 <!-- BEGIN CODING GUIDELINES (omit for knowledge-only repos) -->
 ## Coding Guidelines
 
