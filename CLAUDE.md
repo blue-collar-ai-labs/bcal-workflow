@@ -68,12 +68,6 @@ Use `/start` at the beginning of a session to check for a previous session hando
 
 This is the highest-recurrence lesson family in the connected brains, and it has repeatedly failed to fire because it lived only in `NEXT_SESSION.md`, which is rewritten every session. It belongs here, where it persists.
 
-## Shell Tooling (Windows)
-
-On Windows, the Bash tool and the Read/Write tools do not share a filesystem namespace:
-
-- **`/tmp` is two different directories.** Read/Write tools resolve `/tmp/...` to `C:/tmp/...`; the Bash tool's `/tmp` is the separate MSYS mount. A file written by one family is **invisible to the other at the identical path string**. Read with the tool family that wrote, and when a read fails right after a confirmed write, check the other namespace (`ls -la /tmp/...` vs `ls -la /c/tmp/...`) before concluding the write failed — the misleading part is that "file does not exist" looks exactly like a step that never produced its output. For any handoff between tools, use the scratchpad directory or an absolute `C:/...` path, never a bare `/tmp/...`.
-
 <!-- BEGIN CODING GUIDELINES (omit for knowledge-only repos) -->
 ## Coding Guidelines
 
